@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Results - dLocal Pending Debits</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h1>dLocal Pending Debits Processor</h1>
+            </div>
+            <p class="subtitle">Processing Results</p>
+        </header>
+
+        <div class="success-banner">
+            <i class="fas fa-check-circle"></i>
+            <div>
+                <h2>File Processed Successfully!</h2>
+                <p>{{ filename }}</p>
+            </div>
+        </div>
+
+        <div class="results-summary">
+            <div class="summary-card">
+                <i class="fas fa-calendar-alt"></i>
+                <div>
+                    <h3>File Period</h3>
+                    <p>{% set month_names = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] %}{{ month_names[file_month] }} {{ file_year }}</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <i class="fas fa-filter"></i>
+                <div>
+                    <h3>Filtered For</h3>
+                    <p>{{ month_names[following_month] }} {{ following_year }}</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <i class="fas fa-list-ol"></i>
+                <div>
+                    <h3>Transactions</h3>
+                    <p>{{ transaction_count }} filtered</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="transactions-table-section">
+            <h2><i class="fas fa-table"></i> All Transactions</h2>
+            <div class="table-wrapper">
+                <table class="transactions-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>ACH_DEBIT_AMOUNT</th>
+                            <th>ACH_RETURN_AMOUNT</th>
+                            <th>Date processed</th>
+                            <th>CN</th>
+                            <th>DN</th>
+                            <th>Net Amount (B-C)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for txn in all_transactions %}
+                        <tr {% if txn.is_following_month %}class="highlighted-row"{% endif %}>
+                            <td>{{ txn.date if txn.date else '' }}</td>
+                            <td class="amount">{{ "%.2f"|format(txn.debit) if txn.debit else '' }}</td>
+                            <td class="amount">{{ "%.2f"|format(txn.return) if txn.return else '' }}</td>
+                            <td>{{ txn.date_processed }}</td>
+                            <td>{{ txn.cn if txn.cn else '' }}</td>
+                            <td>{{ txn.dn if txn.dn else '' }}</td>
+                            <td class="amount net-amount">
+                                {% if txn.is_following_month and txn.debit and txn.return %}
+                                    {{ "%.2f"|format(txn.debit - txn.return) }}
+                                {% elif txn.is_following_month and txn.debit %}
+                                    {{ "%.2f"|format(txn.debit) }}
+                                {% elif txn.is_following_month and txn.return %}
+                                    {{ "%.2f"|format(-txn.return) }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="calculation-section">
+            <h2><i class="fas fa-calculator"></i> Calculation Summary</h2>
+            <div class="calc-table">
+                <div class="calc-row">
+                    <span class="calc-label">Total ACH Debit Amount:</span>
+                    <span class="calc-value">${{ "%.2f"|format(total_debit) }}</span>
+                </div>
+                <div class="calc-row">
+                    <span class="calc-label">Total ACH Return Amount:</span>
+                    <span class="calc-value">${{ "%.2f"|format(total_return) }}</span>
+                </div>
+                <div class="calc-row total-row">
+                    <span class="calc-label">Net Amount (Debit - Return):</span>
+                    <span class="calc-value {% if net_amount > 0 %}positive{% elif net_amount < 0 %}negative{% endif %}">
+                        ${{ "%.2f"|format(net_amount) }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="je-preview">
+            <h2><i class="fas fa-file-invoice"></i> Journal Entry Preview</h2>
+            <div class="je-table">
+                <div class="je-header">
+                    <div>Account</div>
+                    <div>Debit</div>
+                    <div>Credit</div>
+                </div>
+                {% if net_amount > 0 %}
+                <div class="je-row">
+                    <div>22010 - Customer Funds Obligation : Customer Funds Liability</div>
+                    <div class="debit">${{ "%.2f"|format(net_amount) }}</div>
+                    <div>-</div>
+                </div>
+                <div class="je-row">
+                    <div>21017 - Other Current Liabilities : Accrued Liabilities - Platform</div>
+                    <div>-</div>
+                    <div class="credit">${{ "%.2f"|format(net_amount) }}</div>
+                </div>
+                {% elif net_amount < 0 %}
+                <div class="je-row">
+                    <div>22010 - Customer Funds Obligation : Customer Funds Liability</div>
+                    <div>-</div>
+                    <div class="credit">${{ "%.2f"|format(net_amount|abs) }}</div>
+                </div>
+                <div class="je-row">
+                    <div>21017 - Other Current Liabilities : Accrued Liabilities - Platform</div>
+                    <div class="debit">${{ "%.2f"|format(net_amount|abs) }}</div>
+                    <div>-</div>
+                </div>
+                {% else %}
+                <div class="je-row">
+                    <div colspan="3" style="text-align: center; font-style: italic;">No journal entry required (Net Amount = 0)</div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="je-details">
+                <p><strong>Date:</strong> {{ file_month }}/{{ last_day }}/{{ file_year }}</p>
+                <p><strong>Reversal Date:</strong> {{ following_month }}/1/{{ following_year }}</p>
+                <p><strong>Memo:</strong> dLocal Pending Debits {{ "%02d"|format(file_month) }}.{{ file_year }}</p>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <h2><i class="fas fa-download"></i> Download Options</h2>
+            <div class="download-buttons">
+                <a href="/download/{{ output_filename }}" class="btn-download full">
+                    <i class="fas fa-file-excel"></i>
+                    <div>
+                        <h3>Full Workbook</h3>
+                        <p>All transactions + Summary + Journal Entry</p>
+                    </div>
+                </a>
+                <a href="/download-je/{{ output_filename }}" class="btn-download je">
+                    <i class="fas fa-file-alt"></i>
+                    <div>
+                        <h3>JE Template Only</h3>
+                        <p>Journal Entry ready for import</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                Process Another File
+            </a>
+        </div>
+    </div>
+</body>
+</html>

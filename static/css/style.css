@@ -1,0 +1,663 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #e8e8e8;
+    min-height: 100vh;
+    padding: 0;
+    color: #000;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+header {
+    background: #fff;
+    padding: 20px 50px;
+    border-bottom: 4px solid #000;
+    margin-bottom: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.logo i {
+    font-size: 32px;
+    color: #000;
+}
+
+.logo h1 {
+    font-size: 26px;
+    color: #000;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.subtitle {
+    color: #555;
+    margin-top: 3px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+/* Alert Messages */
+.alert {
+    background: #fff;
+    padding: 15px 40px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.alert-error {
+    border-left: 5px solid #d32f2f;
+    color: #c62828;
+    background: #ffebee;
+}
+
+.alert-success {
+    border-left: 5px solid #388e3c;
+    color: #2e7d32;
+    background: #e8f5e9;
+}
+
+/* Upload Section */
+.upload-section {
+    background: #f9f9f9;
+    padding: 70px 50px;
+    border-bottom: 3px double #000;
+}
+
+.drop-zone {
+    border: 3px double #000;
+    border-radius: 0;
+    padding: 90px 50px;
+    text-align: center;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    background: white;
+}
+
+.drop-zone:hover,
+.drop-zone.drag-over {
+    border-color: #000;
+    background: #fafafa;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.drop-zone-content i {
+    font-size: 52px;
+    color: #1a1a1a;
+    margin-bottom: 25px;
+}
+
+.drop-zone-content h2 {
+    font-size: 20px;
+    color: #000;
+    margin-bottom: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.drop-zone-content p {
+    color: #555;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+#fileInput {
+    display: none;
+}
+
+.file-info {
+    margin-top: 25px;
+    padding: 18px 25px;
+    background: #f5f5f5;
+    border: 2px solid #000;
+    color: #000;
+    font-weight: 600;
+    display: none;
+    font-size: 13px;
+}
+
+.file-info.show {
+    display: block;
+}
+
+.btn-process {
+    width: 100%;
+    padding: 22px;
+    margin-top: 35px;
+    background: #000;
+    color: white;
+    border: 3px solid #000;
+    border-radius: 0;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    box-shadow: 0 4px 0 #000;
+}
+
+.btn-process:hover:not(:disabled) {
+    background: #333;
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #000;
+}
+
+.btn-process:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-process i {
+    font-size: 16px;
+}
+
+/* Info Section */
+.info-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 0;
+    background: #e0e0e0;
+    border-top: 3px double #000;
+}
+
+.info-card {
+    background: #f9f9f9;
+    padding: 45px;
+    border-right: 3px solid #e0e0e0;
+}
+
+.info-card:last-child {
+    border-right: none;
+}
+
+.info-card i {
+    font-size: 26px;
+    color: #000;
+    margin-bottom: 22px;
+}
+
+.info-card h3 {
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 2px solid #000;
+    padding-bottom: 10px;
+}
+
+.info-card ol,
+.info-card ul {
+    margin-left: 22px;
+    color: #222;
+    line-height: 2.2;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Results Page */
+.success-banner {
+    background: #fff;
+    color: #000;
+    padding: 35px 50px;
+    border-bottom: 4px solid #000;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.success-banner i {
+    font-size: 40px;
+    color: #000;
+}
+
+.success-banner h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.success-banner p {
+    color: #555;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.results-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0;
+    background: #e0e0e0;
+    border-bottom: 3px double #000;
+}
+
+.summary-card {
+    background: #f9f9f9;
+    padding: 35px 45px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    border-right: 3px solid #e0e0e0;
+}
+
+.summary-card:last-child {
+    border-right: none;
+}
+
+.summary-card i {
+    font-size: 30px;
+    color: #000;
+}
+
+.summary-card h3 {
+    font-size: 10px;
+    color: #555;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.summary-card p {
+    font-size: 19px;
+    font-weight: 700;
+    color: #000;
+}
+
+.transactions-table-section,
+.calculation-section,
+.je-preview,
+.download-section {
+    background: #f9f9f9;
+    padding: 50px;
+    border-bottom: 3px double #000;
+}
+
+.transactions-table-section h2,
+.calculation-section h2,
+.je-preview h2,
+.download-section h2 {
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding-bottom: 18px;
+    border-bottom: 3px double #000;
+}
+
+/* Transactions Table */
+.table-wrapper {
+    overflow-x: auto;
+    border: 3px solid #000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    background: white;
+}
+
+.transactions-table thead {
+    background: #000;
+    color: white;
+}
+
+.transactions-table th {
+    padding: 16px 14px;
+    text-align: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 10px;
+    border-right: 2px solid #000;
+}
+
+.transactions-table th:last-child {
+    border-right: none;
+}
+
+.transactions-table td {
+    padding: 13px 14px;
+    border-bottom: 2px solid #e0e0e0;
+    border-right: 2px solid #e0e0e0;
+    color: #222;
+    font-weight: 500;
+}
+
+.transactions-table td:last-child {
+    border-right: none;
+}
+
+.transactions-table tbody tr:last-child td {
+    border-bottom: 3px solid #000;
+}
+
+.transactions-table tbody tr:nth-child(even) {
+    background: #f5f5f5;
+}
+
+.transactions-table tbody tr:hover {
+    background: #efefef;
+}
+
+.transactions-table .highlighted-row {
+    background: #ffff99 !important;
+    font-weight: 600;
+}
+
+.transactions-table .highlighted-row:hover {
+    background: #ffff66 !important;
+}
+
+.transactions-table .amount {
+    text-align: right;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+}
+
+.transactions-table .net-amount {
+    font-weight: 700;
+    color: #000;
+}
+
+.calc-table {
+    background: white;
+    border: 3px solid #000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.calc-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 30px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.calc-row:last-child {
+    border-bottom: 3px solid #000;
+}
+
+.calc-row.total-row {
+    background: #000;
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    border-bottom: none;
+}
+
+.calc-row.total-row .calc-label,
+.calc-row.total-row .calc-value {
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.calc-label {
+    color: #222;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 13px;
+}
+
+.calc-value {
+    font-weight: 700;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.calc-value.positive {
+    color: #000;
+}
+
+.calc-value.negative {
+    color: #000;
+}
+
+/* Journal Entry Preview */
+.je-table {
+    background: white;
+    border: 3px solid #000;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.je-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    background: #000;
+    color: white;
+    padding: 16px 30px;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.je-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    padding: 16px 30px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.je-row:last-child {
+    border-bottom: 3px solid #000;
+}
+
+.je-row:nth-child(even) {
+    background: #f5f5f5;
+}
+
+.debit {
+    color: #000;
+    font-weight: 700;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.credit {
+    color: #000;
+    font-weight: 700;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.je-details {
+    background: #f5f5f5;
+    padding: 28px;
+    border: 3px solid #000;
+}
+
+.je-details p {
+    margin-bottom: 14px;
+    color: #222;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.je-details p:last-child {
+    margin-bottom: 0;
+}
+
+.je-details strong {
+    color: #000;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Download Section */
+.download-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 0;
+    background: #e0e0e0;
+    border: 3px solid #000;
+}
+
+.btn-download {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 40px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    background: white;
+    border: 2px solid #000;
+}
+
+.btn-download.full {
+    background: white;
+    color: #000;
+    border-right: 3px solid #e0e0e0;
+}
+
+.btn-download.je {
+    background: white;
+    color: #000;
+}
+
+.btn-download:hover {
+    background: #f5f5f5;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.btn-download i {
+    font-size: 40px;
+    color: #000;
+}
+
+.btn-download h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.btn-download p {
+    font-size: 12px;
+    color: #555;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.action-buttons {
+    text-align: center;
+    padding: 50px;
+    background: #e8e8e8;
+    border-top: 3px double #000;
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 40px;
+    background: #000;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.15s ease;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 13px;
+    border: 3px solid #000;
+    box-shadow: 0 4px 0 #000;
+}
+
+.btn-secondary:hover {
+    background: #333;
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header {
+        padding: 20px;
+    }
+    
+    .logo h1 {
+        font-size: 20px;
+    }
+    
+    .upload-section,
+    .transactions-table-section,
+    .calculation-section,
+    .je-preview,
+    .download-section {
+        padding: 30px 20px;
+    }
+    
+    .transactions-table {
+        font-size: 11px;
+    }
+    
+    .transactions-table th,
+    .transactions-table td {
+        padding: 8px 6px;
+        font-size: 10px;
+    }
+    
+    .info-card {
+        padding: 30px 20px;
+    }
+    
+    .je-header,
+    .je-row {
+        grid-template-columns: 1.5fr 1fr 1fr;
+        font-size: 12px;
+        padding: 12px 15px;
+    }
+    
+    .download-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .btn-download.full {
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+    }
+}

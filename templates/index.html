@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dLocal Pending Debits Processor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h1>dLocal Pending Debits Processor</h1>
+            </div>
+            <p class="subtitle">Automated Journal Entry Generation</p>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="upload-section">
+            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                <div class="drop-zone" id="dropZone">
+                    <div class="drop-zone-content">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h2>Drop your Excel file here</h2>
+                        <p>or click to browse</p>
+                        <input type="file" name="file" id="fileInput" accept=".xlsx,.xls" required>
+                        <div class="file-info" id="fileInfo"></div>
+                    </div>
+                </div>
+                <button type="submit" class="btn-process" id="processBtn" disabled>
+                    <i class="fas fa-play-circle"></i>
+                    Process File
+                </button>
+            </form>
+        </div>
+
+        <div class="info-section">
+            <div class="info-card">
+                <i class="fas fa-info-circle"></i>
+                <h3>How it works</h3>
+                <ol>
+                    <li>Upload your monthly transaction file (e.g., "09 Control Gusto Inc Septiembre 2025.xlsx")</li>
+                    <li>The system automatically filters transactions for the following month</li>
+                    <li>Calculates net amount (ACH Debit - ACH Return)</li>
+                    <li>Generates journal entries with proper debit/credit allocation</li>
+                </ol>
+            </div>
+            
+            <div class="info-card">
+                <i class="fas fa-check-circle"></i>
+                <h3>Features</h3>
+                <ul>
+                    <li>Automatic month detection from filename</li>
+                    <li>Formula-driven calculations</li>
+                    <li>Highlighted applicable transactions</li>
+                    <li>Ready-to-import journal entries</li>
+                    <li>Download full workbook or JE template only</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
